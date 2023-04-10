@@ -5,4 +5,4 @@ RUN sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|
 RUN yum -y install java
 COPY target/*.war /
 EXPOSE 9080
-CMD java -jar *.jar
+CMD java -jar *.war
