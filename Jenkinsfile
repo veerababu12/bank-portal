@@ -17,7 +17,7 @@ pipeline {
                 stage_name_temp="${env.STAGE_NAME}"
                 StartdateTimee = sh(script: "echo `date +%d-%m-%Y` `date +%H-%M-%S`%`date +%s`", returnStdout: true).trim()
                 //git 'https://github.com/BalajiMokara/java-maven.git'
-                git@github.com:BalajiMokara/bank-portal.git
+                git 'https://github.com/BalajiMokara/bank-portal.git'
                 echo "code cloned on jenkins server !"
                 sleep 3
                 EnddateTime = sh(script: "echo `date +%d-%m-%Y` `date +%H-%M-%S`%`date +%s`", returnStdout: true).trim()
