@@ -1,0 +1,50 @@
+
+
+pipeline {
+    agent any
+
+    stages {
+        stage('Step1 : Git Clone') {
+            steps {
+                //git branch: "${params.Branch}",
+                //credentialsId: 'my_git_cred',
+                //url: 'https://github.com/BalajiMokara/bank-portal.git'
+				git 'https://github.com/BalajiMokara/bank-portal.git'
+				
+            }
+        }
+        stage('step 2: maven build'){
+            steps{
+                script{
+                def MVN_PATH = tool (name: 'mvn386', type: 'maven') + "/bin/mvn"
+                sh "$MVN_PATH package"
+                }
+            }
+        }
+        stage('step :3 docker image build'){
+            steps{
+                sh "docker build -t bharathpilla7/mybankjava:v1.0 ."
+            }
+        }
+        stage('step:4 docker image push'){
+            steps{
+                withCredentials([string(credentialsId: 'docker_cred', variable: 'DockerPassword')]) {
+                    
+                    sh "docker login -u bharathpilla7 -p ${DockerPassword}"
+                    sh "docker push bharathpilla7/mybankjava:v1.0"
+                }
+                //sh "docker login -u bharathpilla7 -p Bharathpilla@"
+               
+            }
+        }
+		
+		stage('step:5 deploy docker image'){
+            steps{        
+                    sh "docker run -d -p 9080:9080 bharathpilla7/mybankjava:v1.0 "
+               
+            }
+        }
+       
+    }
+}
+
